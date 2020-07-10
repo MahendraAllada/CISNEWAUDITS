@@ -1,0 +1,12 @@
+#!/bin/bash
+aws iam generate-credential-report
+count=0
+if [ "$( aws iam get-credential-report --query 'Content' --output text | base64 -d | cut -d, -f4  | grep false | wc -l)" -eq 0 ]; then
+    if [ "$( aws iam get-credential-report --query 'Content' --output text | base64 -d | cut -d, -f8  | grep false | wc -l)" -eq 0 ]; then
+	echo "PASSED"
+	else
+	echo "FAILED"
+	fi
+else
+echo "FAILED in password"
+fi

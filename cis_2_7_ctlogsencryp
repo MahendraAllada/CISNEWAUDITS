@@ -1,0 +1,10 @@
+#!/bin/bash
+
+A=$(aws cloudtrail describe-trails | grep ' "KmsKeyId"' | wc -l)
+B=$(aws cloudtrail describe-trails | grep '"Name"' | wc -l)
+if [ "$A" == "$B"  ];then
+   echo "PASSED"
+
+else
+    echo "FAILED"
+fi

@@ -1,0 +1,11 @@
+#!/bin/sh
+# ** AUTO GENERATED **
+
+for KeyId in `aws kms list-keys | jq '.Keys[].KeyId' | sed 's/"//g'`;
+do
+if [ "$( aws kms get-key-rotation-status --key-id $KeyId | grep "true")" ] ; then
+   echo "PASSED"
+else
+   echo "FAILED"
+fi
+done

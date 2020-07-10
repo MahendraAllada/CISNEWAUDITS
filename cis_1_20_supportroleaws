@@ -1,0 +1,7 @@
+#!/bin/bash
+PolicyArn=$(aws iam list-policies  | jq '.Policies[].Arn' | grep AWSSupportAccess | sed 's/"//g')
+if [ "$(aws iam list-entities-for-policy --policy-arn  $PolicyArn  | grep "RoleName")" ]; then 
+    echo "1.20  PASSED"
+else
+    echo "FAILED"
+fi

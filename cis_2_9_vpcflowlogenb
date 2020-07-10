@@ -1,0 +1,10 @@
+#!/bin/sh
+# ** AUTO GENERATED **
+DFL=$( aws ec2 describe-flow-logs | grep "FlowLogStatus" )
+NOW='            "FlowLogStatus": "ACTIVE",'
+if [ "$NOW" = "$DFL" ]
+then
+   echo "PASSED"
+else
+   echo "FAILED"
+fi

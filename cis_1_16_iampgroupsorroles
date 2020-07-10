@@ -1,0 +1,15 @@
+#!/bin/sh
+# ** AUTO GENERATED **
+
+for UserName in `aws iam list-users --query 'Users[*].UserName' --output text`;
+do
+if [ "$( aws iam list-attached-user-policies --user-name $UserName | sed -r 's/(\[|\])//g' | sed 's/"//g' | sed -r 's/(\{|\})//g' | sed 's/://g' | sed 's/AttachedPolicies//g'  | sed 's/ //g' | sed '/^$/d' | wc -l)" -gt "0" ] ; then
+   if [ "$( aws iam list-user-policies --user-name $UserName | sed -r 's/(\[|\])//g' | sed 's/"//g' | sed -r 's/(\{|\})//g' | sed 's/://g' | sed '/PolicyNames//g'  | sed 's/ //g' | sed '/^$/d' | wc -l)" -gt "0" ] ; then
+   echo "PASSED"
+else
+   echo "FAILED"
+fi
+else
+   echo "FAILED in attached-user-policies"
+fi
+done

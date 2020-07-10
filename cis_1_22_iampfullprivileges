@@ -1,0 +1,18 @@
+#!/bin/bash
+#awk 'FNR == 5 {print}'
+count=0
+for Policy in `aws iam list-policies --output text | gawk -F' ' {'print $2'}`;
+do
+for Version in `aws iam list-policies --output text | gawk -F' ' {'print $5'}`;
+do
+if [ "$(aws iam get-policy-version  --policy-arn $Policy --version-id $Version | grep "Allow" | wc -l)" -gt "0" ]; then
+        count=$((count+1))
+    fi
+echo "$count"
+done
+done
+if [ "$count" -eq 0 ]; then
+    echo "PASSED"
+else
+    echo "FAILED"
+fi

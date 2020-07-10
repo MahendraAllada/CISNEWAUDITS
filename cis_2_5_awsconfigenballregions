@@ -1,0 +1,18 @@
+#!/bin/bash
+if [ "$(  aws configservice describe-configuration-recorders | jq '.ConfigurationRecorders[].recordingGroup' | grep allSupported | grep true | wc -l)" -gt "0" ];then
+  if [ "$(  aws configservice describe-configuration-recorders | jq '.ConfigurationRecorders[].recordingGroup' | grep includeGlobalResourceTypes | grep true | wc -l)" -gt "0" ];then
+   if [ "$(  aws configservice describe-configuration-recorder-status | jq '.ConfigurationRecordersStatus[].lastStatus' | grep SUCCESS | wc -l)" -gt "0" ];then
+    if [ "$(   aws configservice describe-configuration-recorder-status | jq '.ConfigurationRecordersStatus[].recording' | grep true| wc -l)" -gt "0" ];then
+     echo "PASSED"
+    else
+        echo "FAILED"
+    fi
+   else
+       echo "FAILED"
+   fi
+  else  
+      echo "FAILED"
+  fi
+else 
+    echo "FAILED"
+fi

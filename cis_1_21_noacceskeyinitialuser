@@ -1,0 +1,17 @@
+#!/bin/sh
+# ** AUTO GENERATED **
+aws iam generate-credential-report
+count=0
+if [ "$( aws iam get-credential-report --query 'Content' --output text | base64 -d | cut -d, -f1,16 | grep "N/A" | wc -l)" -gt "0" ]; then
+     for UserName in ` aws iam get-credential-report --query 'Content' --output text | base64 -d | cut -d, -f1,16 | grep "N/A" | sed 's/[N/A]//g' | sed 's/,//g'`;
+      do
+if [ "$( aws iam list-access-keys --user-name $UserName | jq '.AccessKeyMetadata[].AccessKeyId' | sed 's/"//g' | wc -l)" -gt "0" ]; then
+count=$((count+1))
+fi 
+done
+fi
+if [ "$count" -eq 0 ]; then
+    echo "1.21 PASSED"
+else
+    echo "FAILED"
+fi

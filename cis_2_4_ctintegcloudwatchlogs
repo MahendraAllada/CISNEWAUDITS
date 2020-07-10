@@ -1,0 +1,11 @@
+#!/bin/bash
+for TrailName in `aws cloudtrail describe-trails | jq '.trailList[].Name' | sed 's/"//g'`;
+do
+if [ "$(aws cloudtrail describe-trails | jq '.trailList[].CloudWatchLogsLogGroupArn')" ]; then
+  if [ "$( aws cloudtrail get-trail-status --name $TrailName | grep "LatestCloudWatchLogsDeliveryTime")" ];then
+    echo "2.4  PASSED"
+else
+    echo "FAILED"
+fi
+fi
+done

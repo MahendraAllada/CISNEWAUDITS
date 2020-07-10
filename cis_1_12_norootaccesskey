@@ -1,0 +1,11 @@
+#!/bin/bash
+aws iam generate-credential-report
+count=0
+if [ "$( aws iam get-credential-report --query 'Content' --output text | base64 -d | cut -d, -f1,9,14 | grep -B1 '<root_account>' | grep true | wc -l)" -gt "0" ]; then
+      count=$((count+1))
+fi
+if [ "$count" -eq 0 ]; then
+    echo "1.12 PASSED"
+else
+    echo "FAILED"
+fi
